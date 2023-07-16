@@ -2,8 +2,19 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
 const app = express();
+const path = require("path")
+const cors = require('cors');
+const dotenv = require("dotenv").config();
+const PORT = process.env.PORT || 4000;
 
 app.use(express.json());
+app.use(cors());
+app.use(express.static(path.join(__dirname, 'build')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
 
 let ADMINS = [];
 let USERS = [];
@@ -226,4 +237,4 @@ app.get("/users/yourcart", authenticateJwt, (req, res) => {
   }
 });
 
-app.listen(3000, () => console.log("Server running on port 3000"));
+app.listen(PORT, () => console.log("Server running on port 4000"));
